@@ -28,6 +28,7 @@ export default function createSwipeNavigator(screens, options) {
     state = {
       currentIndex: 0,
       flatListScreens: initialScreens,
+      scrollEnabled: true,
     };
 
     constructor(props) {
@@ -211,6 +212,10 @@ export default function createSwipeNavigator(screens, options) {
       }
     };
 
+    toggleSwiping = scrollEnabled => {
+      this.setState({ scrollEnabled });
+    };
+
     /**
      * Render an item in the FlatList component.
      * @param  {Number} options.index   The index of the current item.
@@ -229,13 +234,14 @@ export default function createSwipeNavigator(screens, options) {
               goBack: this.goBack,
               navigate: this.navigate,
             },
+            toggleSwiping: this.toggleSwiping,
           })}
         </View>
       );
     };
 
     render() {
-      const { currentIndex, flatListScreens } = this.state;
+      const { currentIndex, flatListScreens, scrollEnabled } = this.state;
 
       const currentScreenName = routeOrder[currentIndex] || '';
       const currentScreen = screens[currentScreenName] || {};
@@ -258,6 +264,7 @@ export default function createSwipeNavigator(screens, options) {
             ref={this.handleFlatListRef}
             removeClippedSubviews
             renderItem={this.renderItem}
+            scrollEnabled={scrollEnabled}
             scrollEventThrottle={16}
             showsHorizontalScrollIndicator={false}
           />
